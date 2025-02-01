@@ -75,7 +75,7 @@ const List = () => {
                     formDataToSend.append("images", file);
                 });
 
-                const response = await axios.post("http://localhost:5000/upload", formDataToSend, {
+                const response = await axios.post("https://bookify-0prq.onrender.com/upload", formDataToSend, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
