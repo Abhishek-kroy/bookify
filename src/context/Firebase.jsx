@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 const FirebaseContext = createContext(null);
 
 // Your web app's Firebase configuration
+console.log(process.env.REACT_APP_apiKey);
 const firebaseConfig = {
     apiKey: `${process.env.REACT_APP_apiKey}`,
     authDomain: `${process.env.REACT_APP_authDomain}`,
