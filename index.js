@@ -5,7 +5,7 @@ const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
-const { GiConsoleController } = require("react-icons/gi");
+require('dotenv').config();
 const { log } = require("console");
 
 const app = express();
