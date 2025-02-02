@@ -237,7 +237,7 @@ export const FirebaseProvider = (props) => {
         }
     };
 
-    const purchaseWithId = async (bookId, selectedQuantity) => {
+    const purchaseWithId = async (bookId, selectedQuantity,bookName) => {
         const buyerEmail = user.email;
         try {
             const firestore = getFirestore();
@@ -276,6 +276,7 @@ export const FirebaseProvider = (props) => {
             const orderData = {
                 bookId: bookId,
                 buyerEmail: buyerEmail,
+                name:bookName,
                 Quantity: selectedQuantity,
                 status: "pending",
                 purchaseDate: new Date(),

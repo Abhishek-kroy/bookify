@@ -86,14 +86,6 @@ const BookDetails = () => {
     }
 
     const handleAddToCart = async () => {
-        if (selectedQuantity <= 0) {
-            toast.error("Please select at least 1 book.");
-            return;
-        }
-        if (selectedQuantity > quantity) {
-            toast.error("Not enough stock available.");
-            return;
-        }
 
         setCartProcessing(true);
 
@@ -144,7 +136,7 @@ const BookDetails = () => {
         setPlacingOrder(true);
 
         try {
-            await firebase.purchaseWithId(bookId, selectedQuantity);
+            await firebase.purchaseWithId(bookId, selectedQuantity,book.name);
             await firebase.reduceBookQuantity(bookId, selectedQuantity);
             toast.success(`Your order for ${selectedQuantity} book(s) has been placed successfully!`);
         } catch (error) {
