@@ -482,13 +482,6 @@ const Home = () => {
                                     <p className="text-gray-300 mb-6 italic">"{testimonial.text}"</p>
 
                                     <div className="flex items-center">
-                                        <div className="w-12 h-12 rounded-full overflow-hidden mr-4 border-2 border-blue-500">
-                                            <img
-                                                src={testimonial.avatar}
-                                                alt={testimonial.name}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
                                         <div>
                                             <h4 className="font-semibold text-white">{testimonial.name}</h4>
                                             <p className="text-gray-400 text-sm">{testimonial.role}</p>
@@ -501,9 +494,7 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Newsletter */}
-            <section className="py-16 bg-gradient-to-r from-blue-900 to-purple-900 relative overflow-hidden">
-                {/* Decorative elements */}
+            {/* <section className="py-16 bg-gradient-to-r from-blue-900 to-purple-900 relative overflow-hidden">
                 <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
                 <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
 
@@ -590,7 +581,7 @@ const Home = () => {
                         </motion.div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
             {/* Features Section */}
             <section className="py-16 bg-gray-900">

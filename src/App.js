@@ -23,6 +23,7 @@ function App() {
         <Route path='/books' element={<ShowBook></ShowBook>} />
         <Route path='/register' element={<RegisterForm></RegisterForm>} />
         <Route path='/book/list' element={<List></List>} />
+        <Route path='/orders/:userId' element={<BookOrders />} />
         <Route path='/cart/:userId' element={<AddToCart></AddToCart>} />
         <Route path='/book/view/:bookId' element={<BookDetails></BookDetails>} />
         <Route path='/book/order/:userId' element={<BookOrders />} />
