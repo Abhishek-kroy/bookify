@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useFirebase } from '../context/Firebase';
 import BookCard from '../components/BookCard';
 import { motion } from "framer-motion";
@@ -70,9 +70,9 @@ const Home = () => {
     // Hero section book carousel
     const [currentSlide, setCurrentSlide] = useState(0);
 
-    const nextSlide = () => {
+    const nextSlide = useCallback(() => {
         setCurrentSlide((prev) => (prev + 1) % featuredBooks.length);
-    };
+    });
     
     const prevSlide = () => {
         setCurrentSlide((prev) => (prev - 1 + featuredBooks.length) % featuredBooks.length);
@@ -81,7 +81,7 @@ const Home = () => {
     useEffect(() => {
         const interval = setInterval(nextSlide, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [nextSlide]);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Book, ShoppingCart, Heart, Eye } from 'lucide-react';
@@ -43,7 +43,7 @@ const BookCard = ({ book}) => {
             }
         };        
         gettingCart();
-    }, [firebase, bookId]);
+    }, [firebase, bookId,book.id]);
 
     return (
         <motion.div 

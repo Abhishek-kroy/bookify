@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BookOpen, ShoppingCart, Star, Clock, Package, Award, 
-  ShoppingBag, X, AlertTriangle, Check, ChevronLeft, ChevronRight,
+X, AlertTriangle, Check, ChevronLeft, ChevronRight,
   Heart, Share, CreditCard, MapPin, ArrowLeft
 } from 'lucide-react';
 import { onValue, ref } from "firebase/database";
@@ -37,6 +37,7 @@ const BookDetails = () => {
                 if (cartData.success && cartData.cartItems) {
                     const isBookInCart = cartData.cartItems.some(item => item.bookId === bookId);
                     setAddedToCart(isBookInCart);
+                    // isInCart=isBookInCart;
                     setIsInCart(isBookInCart);
                 }
             } catch (error) {

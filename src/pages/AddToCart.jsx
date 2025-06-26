@@ -1,10 +1,10 @@
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useFirebase } from "../context/Firebase";
 import { toast } from "react-toastify";
 import BookCard from "../components/BookCard";
 import { motion } from "framer-motion";
-import { ShoppingBag, ChevronLeft, Trash, AlertTriangle, ShoppingCart } from "lucide-react";
+import { ShoppingBag, ChevronLeft, AlertTriangle, ShoppingCart } from "lucide-react";
 
 const CartPage = () => {
     const { user, authLoading } = useFirebase();
@@ -12,7 +12,7 @@ const CartPage = () => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [isProcessing, setIsProcessing] = useState(false);
+    // const [isProcessing, setIsProcessing] = useState(false);
     const firebase = useFirebase();
     const [totalPrice, setTotalPrice] = useState(0);
 
