@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useFirebase } from "../context/Firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { FaBook, FaChartBar, FaShoppingCart, FaHeart } from "react-icons/fa";
 
 const LoginForm = () => {
   const firebase = useFirebase();
@@ -11,8 +13,10 @@ const LoginForm = () => {
     email: "",
     password: "",
   });
-
+  
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (firebase.isLoggedIn) {
@@ -23,6 +27,9 @@ const LoginForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
   };
 
   const validateForm = () => {
@@ -41,106 +48,273 @@ const LoginForm = () => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
+      setIsLoading(true);
       try {
         const response = await firebase.signInUserWithEmailAndPassword(
           formData.email,
           formData.password
         );
         if (response.success) {
-          alert("User Login Successfully!");
-          setFormData({ email: "", password: "" }); // Reset form
+          navigate('/');
         } else {
           alert(`Login Failed: ${response.message}`);
         }
       } catch (error) {
         alert("An unexpected error occurred.");
+      } finally {
+        setIsLoading(false);
       }
     } else {
       setErrors(formErrors);
     }
   };
 
+  // Animation variants
+  const formVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.6,
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+  
+  const itemVariants = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 }
+  };
+
+  const featureVariants = {
+    initial: { opacity: 0, x: 20 },
+    animate: { 
+      opacity: 1, 
+      x: 0,
+      transition: { staggerChildren: 0.15, delayChildren: 0.4 }
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-black py-8 mt-[6.5vh]">
-      {/* Glassmorphism Container */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 p-4 font-sans">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md bg-white bg-opacity-10 backdrop-blur-lg p-8 rounded-xl shadow-2xl border border-white border-opacity-20"
+        className="w-full max-w-5xl bg-gray-800 rounded-2xl shadow-2xl overflow-hidden relative"
       >
-        <h2 className="text-center text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-          Welcome Back
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Email Field */}
-          <div>
-            <label htmlFor="email" className="block text-lg font-medium text-white mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className={`mt-1 block w-full px-4 py-3 bg-white bg-opacity-10 backdrop-blur-sm border border-white border-opacity-20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-300 ${errors.email ? 'border-red-500' : ''}`}
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-            />
-            {errors.email && (
-              <div className="text-sm text-red-400 mt-2">{errors.email}</div>
-            )}
+        {/* Card effect */}
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-br from-blue-900 to-indigo-900 transform -skew-x-12 origin-top-right -mr-32 z-0"></div>
+        
+        <div className="flex flex-col md:flex-row relative z-10">
+          {/* Left side - Login Form */}
+          <div className="w-full md:w-1/2 p-8 md:p-10">
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={formVariants}
+              className="w-full max-w-md mx-auto"
+            >
+              <div className="flex items-center mb-8">
+                <motion.div
+                  initial={{ rotate: -20, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                >
+                  <FaBook className="text-4xl text-blue-500 mr-3" />
+                </motion.div>
+                <div>
+                  <h2 className="text-3xl font-bold mb-1 text-white">Welcome Back</h2>
+                  <p className="text-gray-400">Sign in to continue your reading journey</p>
+                </div>
+              </div>
+              
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Email Field */}
+                <motion.div variants={itemVariants}>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+                    Email Address
+                  </label>
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <FiMail className="text-gray-500 group-hover:text-blue-400 transition-colors duration-200" />
+                    </div>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      className={`block w-full pl-10 py-3 bg-gray-700 border ${errors.email ? 'border-red-500' : 'border-gray-600'} rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="your.email@example.com"
+                    />
+                  </div>
+                  {errors.email && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-sm text-red-500 mt-1"
+                    >
+                      {errors.email}
+                    </motion.p>
+                  )}
+                </motion.div>
+
+                {/* Password Field */}
+                <motion.div variants={itemVariants}>
+                  <div className="flex justify-between items-center mb-1">
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+                      Password
+                    </label>
+                    <Link to="/forgot-password" className="text-sm text-blue-400 hover:text-blue-300 transition-colors duration-200">
+                      Forgot Password?
+                    </Link>
+                  </div>
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <FiLock className="text-gray-500 group-hover:text-blue-400 transition-colors duration-200" />
+                    </div>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      className={`block w-full pl-10 pr-10 py-3 bg-gray-700 border ${errors.password ? 'border-red-500' : 'border-gray-600'} rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <FiEyeOff className="text-gray-400 hover:text-white transition-colors duration-200" />
+                      ) : (
+                        <FiEye className="text-gray-400 hover:text-white transition-colors duration-200" />
+                      )}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-sm text-red-500 mt-1"
+                    >
+                      {errors.password}
+                    </motion.p>
+                  )}
+                </motion.div>
+
+                {/* Submit Button */}
+                <motion.button
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 flex items-center justify-center font-medium"
+                >
+                  {isLoading ? (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    "Sign In"
+                  )}
+                </motion.button>
+
+                <motion.div variants={itemVariants} className="mt-6 text-center">
+                  <p className="text-gray-400">
+                    Don't have an account?{" "}
+                    <Link to="/register" className="text-blue-400 hover:text-blue-300 transition-colors duration-200 font-medium">
+                      Create account
+                    </Link>
+                  </p>
+                </motion.div>
+              </form>
+            </motion.div>
           </div>
+          
+          {/* Right side - Features */}
+          <div className="w-full md:w-1/2 p-8 md:p-10 flex items-center justify-center relative z-10">
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={featureVariants}
+              className="w-full max-w-md"
+            >
+              <motion.div 
+                variants={itemVariants}
+                className="mb-8"
+              >
+                <h2 className="text-3xl font-bold text-white mb-3">Bookify Features</h2>
+                <p className="text-blue-100">
+                  Join thousands of readers who are organizing their libraries and discovering new books.
+                </p>
+              </motion.div>
 
-          {/* Password Field */}
-          <div>
-            <label htmlFor="password" className="block text-lg font-medium text-white mb-2">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className={`mt-1 block w-full px-4 py-3 bg-white bg-opacity-10 backdrop-blur-sm border border-white border-opacity-20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-300 ${errors.password ? 'border-red-500' : ''}`}
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-            />
-            {errors.password && (
-              <div className="text-sm text-red-400 mt-2">{errors.password}</div>
-            )}
-          </div>
-
-          {/* Submit Button */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            type="submit"
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300"
-          >
-            Login
-          </motion.button>
-        </form>
-
-        {/* Separator */}
-        <div className="flex items-center my-6">
-          <div className="flex-grow border-t border-white border-opacity-20"></div>
-          <span className="mx-4 text-sm text-white">OR</span>
-          <div className="flex-grow border-t border-white border-opacity-20"></div>
+              <div className="space-y-4">
+      {/* Buy & Sell Books */}
+      <motion.div
+        variants={itemVariants}
+        className="flex items-start p-4 bg-blue-800 bg-opacity-30 rounded-xl backdrop-blur-sm border border-blue-700 border-opacity-30 transform hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
+      >
+        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-3 rounded-lg mr-4 shadow-md">
+          <FaShoppingCart className="text-2xl text-white" />
         </div>
+        <div>
+          <h3 className="text-xl font-semibold text-white">Buy & Sell Books</h3>
+          <p className="text-blue-100 text-sm">Easily buy and sell books within the community.</p>
+        </div>
+      </motion.div>
 
-        {/* Google Login Button */}
-        <motion.button
-          whileHover={{ scale:  1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={firebase.signinWithGoogle}
-          className="w-full bg-gradient-to-r from-red-500 to-pink-600 text-white py-3 rounded-lg hover:from-red-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-300 flex items-center justify-center"
-        >
-          <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.344-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/>
-          </svg>
-          Login with Google
-        </motion.button>
+      {/* Book Recommendations */}
+      <motion.div
+        variants={itemVariants}
+        className="flex items-start p-4 bg-blue-800 bg-opacity-30 rounded-xl backdrop-blur-sm border border-blue-700 border-opacity-30 transform hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
+      >
+        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-3 rounded-lg mr-4 shadow-md">
+          <FaChartBar className="text-2xl text-white" />
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold text-white">Smart Recommendations</h3>
+          <p className="text-blue-100 text-sm">Get personalized book suggestions based on your reading preferences.</p>
+        </div>
+      </motion.div>
+
+      {/* Wishlist & Favorites */}
+      <motion.div
+        variants={itemVariants}
+        className="flex items-start p-4 bg-blue-800 bg-opacity-30 rounded-xl backdrop-blur-sm border border-blue-700 border-opacity-30 transform hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
+      >
+        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-3 rounded-lg mr-4 shadow-md">
+          <FaHeart className="text-2xl text-white" />
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold text-white">Wishlist & Favorites</h3>
+          <p className="text-blue-100 text-sm">Save books you want to read or purchase later.</p>
+        </div>
+      </motion.div>
+    </div>
+
+              <motion.div 
+                variants={itemVariants}
+                className="mt-8"
+              >
+                <Link to="/register">
+                  <motion.button
+                    whileHover={{ scale: 1.03, boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)" }}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 py-3 rounded-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all duration-300 flex items-center justify-center"
+                  >
+                    Create a free account →
+                  </motion.button>
+                </Link>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

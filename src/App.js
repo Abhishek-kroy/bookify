@@ -10,6 +10,7 @@ import BookDetails from './pages/BookDetails';
 import Footer from './components/Footer';
 import BookOrders from './pages/BookOrders';
 import AddToCart from './pages/AddToCart'
+import ShowBook from './pages/ShowBook';
 
 function App() {
   return (
@@ -18,11 +19,12 @@ function App() {
     <NavbarCom/>
         <Routes>
         <Route path='/' element={<Home/>} />
-        <Route path='/login' element={<LoginForm>Login</LoginForm>} />
-        <Route path='/register' element={<RegisterForm>Login</RegisterForm>} />
-        <Route path='/book/list' element={<List>Login</List>} />
-        <Route path='/cart/:userId' element={<AddToCart>Login</AddToCart>} />
-        <Route path='/book/view/:bookId' element={<BookDetails>Login</BookDetails>} />
+        <Route path='/login' element={<LoginForm></LoginForm>} />
+        <Route path='/books' element={<ShowBook></ShowBook>} />
+        <Route path='/register' element={<RegisterForm></RegisterForm>} />
+        <Route path='/book/list' element={<List></List>} />
+        <Route path='/cart/:userId' element={<AddToCart></AddToCart>} />
+        <Route path='/book/view/:bookId' element={<BookDetails></BookDetails>} />
         <Route path='/book/order/:userId' element={<BookOrders />} />
       </Routes>
     <Footer/>
