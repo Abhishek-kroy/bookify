@@ -60,7 +60,7 @@ const LoginForm = () => {
           alert(`Login Failed: ${response.message}`);
         }
       } catch (error) {
-        alert("An unexpected error occurred.");
+        // alert("An unexpected error occurred.");
       } finally {
         setIsLoading(false);
       }
