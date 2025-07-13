@@ -66,7 +66,7 @@ const RegisterForm = () => {
                     alert(`Registration Failed: ${response.message}`);
                 }
             } catch (error) {
-                alert("An unexpected error occurred.");
+                // alert("An unexpected error occurred.");
             } finally {
                 setIsLoading(false);
             }
